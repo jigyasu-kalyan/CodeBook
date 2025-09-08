@@ -9,7 +9,7 @@
  *
  * The logic uses a 3-color DFS. For the undirected case, it correctly
  * ignores the trivial 2-edge cycle back to the parent node.
- * Nodes are assumed to be 0-indexed.
+ * Nodes are assumed to be 1-indexed (from 1 to N).
  *
  * Complexity:
  * - Time: O(V + E)
@@ -27,7 +27,6 @@
  *
  * 3.  Add edges:
  * `detector.add_edge(u, v);`
- * (For undirected graphs, this automatically adds both u-v and v-u)
  *
  * 4.  Find a cycle:
  * `vector<int> cycle = detector.find_cycle();`
@@ -49,7 +48,7 @@ struct CycleDetector {
 
     // Constructor: specify if the graph is undirected
     CycleDetector(int num_nodes, bool undirected = false) : n(num_nodes), is_undirected(undirected) {
-        adj.resize(n);
+        adj.resize(n + 1); // 1-indexed
     }
 
     // Add an edge. For undirected, adds the reverse edge automatically.
@@ -87,11 +86,11 @@ private:
 public:
     // Main method to find and return a cycle
     std::vector<int> find_cycle() {
-        color.assign(n, 0);
-        parent.assign(n, -1);
+        color.assign(n + 1, 0);    // 1-indexed
+        parent.assign(n + 1, -1); // 1-indexed
         cycle_start = -1;
 
-        for (int v = 0; v < n; v++) {
+        for (int v = 1; v <= n; v++) { // 1-indexed
             if (color[v] == 0 && dfs(v, -1)) {
                 break;
             }
